@@ -1,9 +1,9 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Image, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ArtistProfile = ({navigation}) => {
-  const user = { name: 'Ashley Scott', avatar: require('../images/HomeAudioListening/Avatar3.png') };
+  // const user = { name: 'Ashley Scott', avatar: require('../images/HomeAudioListening/Avatar3.png') };
 
   const suggestions = [
     { title: 'Reflection', artist: 'Christina Aguilera', image: require('../images/HomeAudioListening/Container26.png') },
@@ -33,13 +33,65 @@ const handleImagePress = (chart) => {
     // Điều hướng sang màn hình PlaylistDetail
     navigation.navigate('PlaylistDetail', { chart: chart });
   };
+  const [user, setUser] = useState(null);
+
+  // Lấy dữ liệu từ user.json
+  useEffect(() => {
+    const loadUserData = () => {
+      try {
+        // Sử dụng require để tải tệp user.json
+        const userData = require('../data/user.json'); // Đảm bảo đường dẫn đúng
+        setUser(userData);
+      } catch (error) {
+        console.error('Error loading user data:', error);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
+  if (!user) {
+    return <Text>Loading...</Text>; // Hiển thị khi dữ liệu chưa được tải
+  }
+
+  const handleMenuPress = () => {
+    // Hiển thị menu với các tùy chọn
+    Alert.alert(
+      "Profile Options",
+      "Choose an option",
+      [
+        {
+          text: "View Profile",
+          onPress: () => {
+            // Điều hướng đến màn hình hồ sơ
+            navigation.navigate('ProfileScreen', { user: user });
+          }
+        },
+        {
+          text: "Log Out",
+          onPress: () => {
+            // Xử lý đăng xuất
+            Alert.alert("Logged out", "You have been logged out.");
+          }
+        },
+        {
+          text: "Cancel",
+          style: "cancel"
+        }
+      ]
+    );
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="menu" size={28} color="#000" />
+        <Ionicons name="menu" size={28} color="#000" onPress={handleMenuPress} />
         <View style={styles.rightHeader}>
           <Ionicons name="notifications-outline" size={28} color="#000" />
-          <Image source={user.avatar} style={styles.avatar} />
+          <TouchableOpacity onPress={handleMenuPress}>
+            {/* Đảm bảo sử dụng URL cho hình ảnh người dùng */}
+            <Image source={{ uri: user.avatar }} style={styles.avatar} />
+          </TouchableOpacity>
         </View>
       </View>
       <Text style={styles.greeting}>Good morning,</Text>
