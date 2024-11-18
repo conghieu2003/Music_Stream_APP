@@ -1,0 +1,58 @@
+{
+  "playlist": {
+    "title": "Top 50 - Canada",
+    "likes": "1,234",
+    "duration": "05:10:18",
+    "updated": "Daily chart - Toppers update",
+    "coverImage": "../images/PlaylistDetails/Image50.png",
+    "songs": [
+      {
+        "title": "FLOWER",
+        "artist": "Jessica Gonzalez",
+        "plays": "2.1M",
+        "duration": "3:36",
+        "image": "../images/PlaylistDetails/Image51.png"
+      },
+      {
+        "title": "Shape of You",
+        "artist": "Anthony Taylor",
+        "plays": "68M",
+        "duration": "3:35",
+        "image": "../images/PlaylistDetails/Image52.png"
+      },
+      {
+        "title": "Blinding Lights",
+        "artist": "Brian Bailey",
+        "plays": "93M",
+        "duration": "4:39",
+        "image": "../images/PlaylistDetails/Image53.png"
+      },
+      {
+        "title": "Levitating",
+        "artist": "Anthony Taylor",
+        "plays": "9M",
+        "duration": "7:48",
+        "image": "../images/PlaylistDetails/Image54.png"
+      },
+      {
+        "title": "Astronaut in the Ocean",
+        "artist": "Pedro Moreno",
+        "plays": "23M",
+        "duration": "3:36",
+        "image": "../images/PlaylistDetails/Image55.png"
+      },
+      {
+        "title": "Dynamite",
+        "artist": "Elena Jimenez",
+        "plays": "10M",
+        "duration": "6:22",
+        "image": "../images/PlaylistDetails/Image56.png"
+      }
+    ]
+  },
+  "currentSong": {
+    "title": "FLOWER",
+    "artist": "Jessica Gonzalez",
+    "image": "../images/PlaylistDetails/Image57.png"
+  }
+}

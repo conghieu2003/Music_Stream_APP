@@ -1,0 +1,72 @@
+{
+    "user": {
+      "name": "Ashley Scott",
+      "avatar": "../images/HomeAudioListening/Avatar3.png"
+    },
+    "suggestions": [
+      {
+        "title": "Reflection",
+        "artist": "Christina Aguilera",
+        "image": "../images/HomeAudioListening/Container26.png"
+      },
+      {
+        "title": "In The Stars",
+        "artist": "Benson Boone",
+        "image": "../images/HomeAudioListening/Container27.png"
+      },
+      {
+        "title": "In The Stars",
+        "artist": "Benson Boone",
+        "image": "../images/HomeAudioListening/Container26.png"
+      }
+    ],
+    "charts": [
+      {
+        "title": "Top 50 Canada",
+        "image": "../images/HomeAudioListening/Container31.png",
+        "name": "Daily chart - Toppers update"
+      },
+      {
+        "title": "Top 50 Global",
+        "image": "../images/HomeAudioListening/Container32.png",
+        "name": "Daily chart - Toppers update"
+      },
+      {
+        "title": "Top 50 Trending",
+        "image": "../images/HomeAudioListening/Container33.png",
+        "name": "Daily chart - Toppers update"
+      }
+    ],
+    "trendingAlbums": [
+      {
+        "title": "ME",
+        "artist": "Jessica Gonzalez",
+        "image": "../images/HomeAudioListening/Image45.png"
+      },
+      {
+        "title": "Magna nost",
+        "artist": "Brian Thomas",
+        "image": "../images/HomeAudioListening/Image46.png"
+      },
+      {
+        "title": "Magna nost",
+        "artist": "Brian Thomas",
+        "image": "../images/HomeAudioListening/Image47.png"
+      }
+    ],
+    "popularArtists": [
+      {
+        "name": "Jennifer Wilson",
+        "image": "../images/HomeAudioListening/Image39.png"
+      },
+      {
+        "name": "Elizabeth Hall",
+        "image": "../images/HomeAudioListening/Image40.png"
+      },
+      {
+        "name": "Anthony",
+        "image": "../images/HomeAudioListening/Image41.png"
+      }
+    ]
+  }
+  
