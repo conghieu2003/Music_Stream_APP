@@ -27,16 +27,6 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.buttonText}>Tiếp tục bằng Google</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LoginWithFacebook')}>
-        <Ionicons name="logo-facebook" size={24} color="#fff" />
-        <Text style={styles.buttonText}>Tiếp tục bằng Facebook</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LoginWithApple')}>
-        <Ionicons name="logo-apple" size={24} color="#fff" />
-        <Text style={styles.buttonText}>Tiếp tục bằng Apple</Text>
-      </TouchableOpacity>
-      
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LoginForm')}>
         <Ionicons name="key-outline" size={24} color="#fff" />
         <Text style={styles.buttonText}>Đăng nhập bằng tài khoản</Text>

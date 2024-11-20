@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import userData from '../data/user.json'; // Dữ liệu từ file JSON
+import { UserContext } from './UserContext';
 
 const LoginForm = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const { users } = useContext(UserContext); // Lấy danh sách người dùng từ context
+
   const handleLogin = () => {
-    const user = userData.find(
+    const user = users.find(
       (u) => u.username === username && u.password === password
     );
 
