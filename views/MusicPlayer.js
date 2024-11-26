@@ -99,16 +99,38 @@ const useMusicPlayer = (songs) => {
   };
 
   const playRandomSong = async () => {
-    if (!songs || songs.length === 0) return null;
+    // If no songs available
+    if (!songs || songs.length === 0) return;
 
-    const randomIndex = Math.floor(Math.random() * songs.length);
-    const randomSong = songs[randomIndex];
+    // Get random index, excluding current song if any
+    let randomIndex;
+    if (currentTrack) {
+      const currentIndex = songs.findIndex(song => song.uri === currentTrack.uri);
+      do {
+        randomIndex = Math.floor(Math.random() * songs.length);
+      } while (randomIndex === currentIndex && songs.length > 1);
+    } else {
+      randomIndex = Math.floor(Math.random() * songs.length);
+    }
 
-    // Play the random song using existing playSong function
-    await playSong(randomSong);
+    // Play the random song
+    await playSong(songs[randomIndex]);
+  };
 
-    // Return the played song so we can update UI
-    return randomSong;
+  const cleanup = async () => {
+    if (sound) {
+      try {
+        await sound.stopAsync();
+        await sound.unloadAsync();
+        setSound(null);
+        setIsPlaying(false);
+        setCurrentTrack(null);
+        setCurrentTime(0);
+        setDuration(0);
+      } catch (error) {
+        console.log('Cleanup error:', error);
+      }
+    }
   };
   return {
     isPlaying,
@@ -121,6 +143,7 @@ const useMusicPlayer = (songs) => {
     handleNextSong,
     handlePreviousSong,
     playRandomSong,
+    cleanup,
   };
 };
 

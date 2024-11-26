@@ -56,9 +56,8 @@ const PlaylistScreen = ({ route }) => {
 
   const [nowPlaying, setNowPlaying] = useState(null);
 
-  // console.log('Progress:', progress, 'Current Time:', currentTime, 'Duration:', duration);
-  // Giá trị từ 0 đến 1
-
+ 
+ 
   const {
     isPlaying,
     currentTrack,
@@ -70,7 +69,17 @@ const PlaylistScreen = ({ route }) => {
     handlePreviousSong,
     seekTo,
     playRandomSong,
+    cleanup,
   } = useMusicPlayer(playlist.songs);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', async () => {
+      await cleanup();
+      setNowPlaying(null);
+    });
+
+    return unsubscribe;
+  }, [navigation, cleanup]);
 
   const progress = duration > 0 ? currentTime / duration : 0;
 
@@ -138,7 +147,7 @@ const PlaylistScreen = ({ route }) => {
       </ScrollView>
       {nowPlaying && (
         <View style={styles.nowPlaying}>
-          <Image source={nowPlaying.image} style={styles.nowPlayingImage} />
+          <Image source={{ uri: nowPlaying.image }} style={styles.nowPlayingImage} />
           <View style={styles.nowPlayingInfo}>
             <Text style={styles.nowPlayingTitle}>{nowPlaying.title}</Text>
             <Text style={styles.nowPlayingArtist}>{nowPlaying.artist}</Text>
