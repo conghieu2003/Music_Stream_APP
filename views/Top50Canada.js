@@ -146,7 +146,16 @@ const PlaylistScreen = ({ route }) => {
         ))}
       </ScrollView>
       {nowPlaying && (
-        <View style={styles.nowPlaying}>
+        <TouchableOpacity
+        style={styles.nowPlaying}
+        onPress={() => {
+          navigation.navigate('PlayAnAudio', { 
+            nowPlaying,
+            currentTime,
+            isPlaying,
+            duration
+           });
+        }}>
           <Image source={{ uri: nowPlaying.image }} style={styles.nowPlayingImage} />
           <View style={styles.nowPlayingInfo}>
             <Text style={styles.nowPlayingTitle}>{nowPlaying.title}</Text>
@@ -201,7 +210,7 @@ const PlaylistScreen = ({ route }) => {
               />
             </TouchableOpacity>
           </View>
-        </View>
+        </TouchableOpacity>
       )}
     </View>
   );

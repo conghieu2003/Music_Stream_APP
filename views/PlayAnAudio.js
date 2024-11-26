@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,131 +7,154 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import useMusicPlayer from './MusicPlayer';
+import Slider from '@react-native-community/slider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { FontAwesome } from '@expo/vector-icons';
+// Hàm chuyển đổi thời gian từ giây sang định dạng mm:ss
 
 const MusicPlayerScreen = () => {
+  const route = useRoute();
+  const { nowPlaying, currentTime: initialTime, isPlaying: wasPlaying } = route.params; // Nhận bài hát hiện tại từ PlaylistScreen
+
+  const {
+    isPlaying,
+    currentTime,
+    duration,
+    togglePlayPause,
+    seekTo,
+    playSong,
+    cleanup,
+  } = useMusicPlayer([nowPlaying]); // Truyền bài hát hiện tại vào useMusicPlayer
+
+  useEffect(() => {
+    const setupPlayback = async () => {
+      try {
+        await playSong(nowPlaying); // Phát bài hát hiện tại
+  
+        // Nếu có thời gian đã dừng (currentTime > 0), seek đến thời gian đó
+        if (initialTime > 0) {
+          await seekTo(initialTime); // Seek đến thời gian bài hát đã dừng
+        }
+  
+        // Nếu bài hát không đang phát, tạm dừng
+        if (wasPlaying) {
+          await togglePlayPause(); // Nếu trước đó đang phát, sẽ tiếp tục
+        }
+      } catch (error) {
+        console.error('Error setting up playback:', error);
+      }
+    };
+  
+    setupPlayback();
+  }, [nowPlaying, initialTime, wasPlaying]);
+  
+  
+
+  const progress = duration > 0 ? currentTime / duration : 0;
   return (
     <ImageBackground
-      source={require('../images/PlayAnAudio/Image58.png')}
+      source={{ uri: nowPlaying.image }}
       style={styles.backgroundImage}>
       <View style={styles.container}>
-        <Text style={styles.time}>9:41</Text>
-        <View style={styles.statusIcons}>
-          <Ionicons name="wifi" size={20} color="#fff" />
-          <Ionicons name="battery-full" size={20} color="#fff" />
-        </View>
-        <Text style={styles.songTitle}>FLOWER</Text>
-        <Text style={styles.artistName}>Jessica Gonzalez</Text>
-        <Image
-          source={require('../images/PlayAnAudio/Group4.png')}
-          style={styles.waveform}
-        />
-        <View style={styles.progressBarContainer}>
-          <Text style={styles.currentTime}>0:06</Text>
-          <View style={styles.progressBar}>
-            <View style={styles.progress} />
+        <Text style={styles.songTitle}>{nowPlaying.title}</Text>
+        <Text style={styles.artistName}>{nowPlaying.artist}</Text>
+        {/* Thêm các phần tử UI tương tự */}
+          {/* Thanh tiến trình */}
+          <View style={styles.progressContainer}>
+          <Slider
+            style={styles.progressBar}
+            value={progress}
+            minimumValue={0}
+            maximumValue={1}
+            minimumTrackTintColor="#1DB954"
+            maximumTrackTintColor="#555"
+            thumbTintColor="#1DB954"
+            onSlidingComplete={(value) => {
+              const seekTime = value * duration; // Tính thời gian cần seek
+              seekTo(seekTime);
+            }}
+          />
+          <View style={styles.timeContainer}>
+            <Text style={styles.timeText}>{formatTime(currentTime)}</Text>
+            <Text style={styles.timeText}>{formatTime(duration)}</Text>
           </View>
-          <Text style={styles.totalTime}>3:08</Text>
         </View>
         <View style={styles.controls}>
-          <TouchableOpacity style={styles.controlButton1}>
-            <Ionicons name="shuffle-outline" size={28} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.controlButton1}>
-            <Ionicons name="play-skip-back-outline" size={28} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.playButton}>
-            <Image source={require('../images/PlayAnAudio/IconButton3.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.controlButton2}>
-            <Ionicons name="play-skip-forward-outline" size={28} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.controlButton3}>
-            <Ionicons name="ellipsis-horizontal-outline" size={28} color="#fff" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.bottom}>
-          <TouchableOpacity style={styles.controlButton4}>
-            <Ionicons name="heart-outline" size={28} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.controlButtonText1}>12K</Text>
-          <TouchableOpacity style={styles.controlButton5}>
+          <TouchableOpacity style={styles.controlButton} onPress={togglePlayPause}>
             <Ionicons
-              name="chatbox-ellipses-outline"
-              size={28}
-              color="#fff"
+              name={isPlaying ? 'pause-circle' : 'play-circle'}
+              size={50}
+              color="#1DB954"
             />
-          </TouchableOpacity>
-          <Text style={styles.controlButtonText2}>450</Text>
-          <TouchableOpacity style={styles.controlButton6}>
-            <Ionicons name="share-outline" size={28} color="#fff" />
           </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>
   );
 };
+const formatTime = (time) => {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+};
 
 const styles = StyleSheet.create({
-  backgroundImage: { flex: 1, resizeMode: 'cover', justifyContent: 'center' },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
     padding: 20,
   },
-  time: {
+  songTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
     color: '#fff',
+    marginTop: 250,
+    textAlign: 'center',
+  },
+  artistName: {
     fontSize: 20,
-    position: 'absolute',
-    top: 10,
-    left: 20,
+    color: '#ccc',
+    textAlign: 'center',
+    marginBottom: 20,
   },
-  statusIcons: {
-    flexDirection: 'row',
-    position: 'absolute',
-    top: 10,
-    right: 20,
+  progressContainer: {
+    marginVertical: 20,
   },
-  songTitle: { fontSize: 28, fontWeight: 'bold', color: '#fff', marginTop: 250 },
-  artistName: { fontSize: 20, color: '#ccc' },
-  progressBarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  currentTime: { color: '#fff', fontSize: 14 },
   progressBar: {
-    flex: 1,
-    height: 5,
-    backgroundColor: '#555',
-    borderRadius: 2.5,
-    marginHorizontal: 10,
+    width: '100%',
+    height: 40,
   },
-  progress: {
-    width: '20%',
-    height: '100%',
-    backgroundColor: '#1DB954',
-    borderRadius: 2.5,
+  timeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 5,
   },
-  totalTime: { color: '#fff', fontSize: 14 },
+  timeText: {
+    color: '#fff',
+    fontSize: 14,
+  },
   controls: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    width: '100%',
+    justifyContent: 'center',
+    marginTop: 40,
   },
-  bottom:{
-  alignItems: 'center',
-  flexDirection: 'row',
-  marginBottom: -250
+  controlButton: {
+    backgroundColor: '#1DB954',
+    padding: 15,
+    borderRadius: 50,
   },
-  controlButton5: { alignItems: 'center', padding:40 },
-  controlButtonText1: { color: '#fff', fontSize: 12, padding: 10 },
-  controlButtonText2: { color: '#fff', fontSize: 12,marginLeft:-30 },
-  controlButton6: { alignItems: 'center', marginLeft:150 },
-  waveform: { width: '100%', height: 80, resizeMode: 'contain', marginTop: 20 },
+  controlButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
+
 
 export default MusicPlayerScreen;
