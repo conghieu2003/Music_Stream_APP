@@ -37,6 +37,7 @@ const useMusicPlayer = (songs) => {
 
     if (status.isLoaded) {
       setDuration(status.durationMillis / 1000);
+      setCurrentTime(status.positionMillis / 1000);
     }
 
     await newSound.playAsync();

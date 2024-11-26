@@ -66,9 +66,8 @@ const PlaylistScreen = ({ route }) => {
   };
 
   const [nowPlaying, setNowPlaying] = useState(null);
-  const progress = duration > 0 ? currentTime / duration : 0;
+ 
   // console.log('Progress:', progress, 'Current Time:', currentTime, 'Duration:', duration);
-  // const [progress, setProgress] = useState(0);
   // Giá trị từ 0 đến 1
 
   const {
@@ -80,8 +79,10 @@ const PlaylistScreen = ({ route }) => {
     togglePlayPause,
     handleNextSong,
     handlePreviousSong,
+    seekTo,
   } = useMusicPlayer(playlist.songs);
   
+  const progress = duration > 0 ? currentTime / duration : 0;
 
   const handlePlaySong = (song) => {
     playSong(song);
