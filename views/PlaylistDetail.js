@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,9 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import Slider from '@react-native-community/slider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import useMusicPlayer from './MusicPlayer';
 
 const PlaylistScreen = ({ route }) => {
   const { chart } = route.params;
@@ -24,49 +26,66 @@ const PlaylistScreen = ({ route }) => {
         plays: '2.1M',
         duration: '3:36',
         image: require('../images/PlaylistDetails/Image51.png'),
+        uri: 'https://audio.jukehost.co.uk/mpSN02RCjQCE57MJNAmKUtIpa7T7qOgG', // Đảm bảo mỗi bài hát có một URL hợp lệ
       },
       {
-        title: 'Shape of You',
-        artist: 'Anthony Taylor',
-        plays: '68M',
-        duration: '3:35',
-        image: require('../images/PlaylistDetails/Image52.png'),
-      },
-      {
-        title: 'Blinding Lights',
-        artist: 'Brian Bailey',
-        plays: '93M',
-        duration: '4:39',
-        image: require('../images/PlaylistDetails/Image53.png'),
-      },
-      {
-        title: 'Levitating',
-        artist: 'Anthony Taylor',
-        plays: '9M',
-        duration: '7:48',
-        image: require('../images/PlaylistDetails/Image54.png'),
-      },
-      {
-        title: 'Astronaut in the Ocean',
-        artist: 'Pedro Moreno',
-        plays: '23M',
+        title: 'FLOWER',
+        artist: 'Jessica Gonzalez',
+        plays: '2.1M',
         duration: '3:36',
-        image: require('../images/PlaylistDetails/Image55.png'),
+        image: 'https://i.ytimg.com/vi/r6yYtbv63ms/maxresdefault.jpg',
+        uri: 'https://audio.jukehost.co.uk/YQz1vDsGFwAgLsuE2SxfoBWfyZeYercH', // Đảm bảo mỗi bài hát có một URL hợp lệ
       },
       {
-        title: 'Dynamite',
-        artist: 'Elena Jimenez',
-        plays: '10M',
-        duration: '6:22',
-        image: require('../images/PlaylistDetails/Image56.png'),
+        title: 'FLOWER',
+        artist: 'Jessica Gonzalez',
+        plays: '2.1M',
+        duration: '3:36',
+        image: require('../images/PlaylistDetails/Image51.png'),
+        uri: 'https://example.com/flower.mp3', // Đảm bảo mỗi bài hát có một URL hợp lệ
       },
+      {
+        title: 'FLOWER',
+        artist: 'Jessica Gonzalez',
+        plays: '2.1M',
+        duration: '3:36',
+        image: require('../images/PlaylistDetails/Image51.png'),
+        uri: 'https://example.com/flower.mp3', // Đảm bảo mỗi bài hát có một URL hợp lệ
+      },
+      {
+        title: 'FLOWER',
+        artist: 'Jessica Gonzalez',
+        plays: '2.1M',
+        duration: '3:36',
+        image: require('../images/PlaylistDetails/Image51.png'),
+        uri: 'https://example.com/flower.mp3', // Đảm bảo mỗi bài hát có một URL hợp lệ
+      },
+
+      // Thêm các bài hát khác tương tự...
     ],
   };
 
-  const currentSong = {
-    title: 'FLOWER',
-    artist: 'Jessica Gonzalez',
-    image: require('../images/PlaylistDetails/Image57.png'),
+  const [nowPlaying, setNowPlaying] = useState(null);
+  const progress = duration > 0 ? currentTime / duration : 0;
+  // console.log('Progress:', progress, 'Current Time:', currentTime, 'Duration:', duration);
+  // const [progress, setProgress] = useState(0);
+  // Giá trị từ 0 đến 1
+
+  const {
+    isPlaying,
+    currentTrack,
+    currentTime,
+    duration,
+    playSong,
+    togglePlayPause,
+    handleNextSong,
+    handlePreviousSong,
+  } = useMusicPlayer(playlist.songs);
+  
+
+  const handlePlaySong = (song) => {
+    playSong(song);
+    setNowPlaying(song); // Cập nhật bài hát hiện đang phát
   };
   return (
     <View style={styles.container}>
@@ -78,35 +97,31 @@ const PlaylistScreen = ({ route }) => {
           <Text
             style={
               styles.playlistDetail
-            }>{`${playlist.likes} • ${playlist.duration}`}</Text>
+            }>{`${playlist.likes} ${playlist.duration}`}</Text>
           <Text style={styles.updated}>{playlist.updated}</Text>
         </View>
       </View>
+
+      {/* Nút điều khiển */}
       <View style={styles.buttonHeader}>
-        <TouchableOpacity style={styles.controlButton1}>
-          <Ionicons name="heart-outline" size={28} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.controlButton2}>
+        {/* ... Các nút điều khiển khác */}
+        <TouchableOpacity style={styles.playButton} onPress={togglePlayPause}>
           <Ionicons
-            name="ellipsis-horizontal-outline"
+            name={isPlaying ? 'pause-circle-outline' : 'play-circle-outline'}
             size={28}
-            color="black"
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.controlButton3}>
-          <Ionicons name="shuffle-outline" size={28} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.controlButton4}>
-          <Image
-            source={require('../images/PlaylistDetails/IconButton2.png')}
+            color="#1DB954"
           />
         </TouchableOpacity>
       </View>
+
       {/* Danh sách bài hát */}
       <ScrollView style={styles.songList}>
         {playlist.songs.map((song, index) => (
-          <View key={index} style={styles.songItem}>
-            <Image source={song.image} style={styles.songImage} />
+          <TouchableOpacity
+            key={index}
+            onPress={() => handlePlaySong(song)}
+            style={styles.songItem}>
+            <Image source={{ uri: song.image }} style={styles.songImage} />
             <View style={styles.songInfo}>
               <Text style={styles.songTitle}>{song.title}</Text>
               <Text style={styles.songArtist}>{song.artist}</Text>
@@ -115,37 +130,90 @@ const PlaylistScreen = ({ route }) => {
                   styles.songDetail
                 }>{`${song.plays} • ${song.duration}`}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
-
-      {/* Thanh điều khiển phát nhạc */}
-      <View style={styles.currentSongBar}>
-        <Image source={currentSong.image} style={styles.currentSongImage} />
-        <View style={styles.currentSongInfo}>
-          <Text style={styles.currentSongTitle}>{currentSong.title}</Text>
-          <Text style={styles.currentSongArtist}>{currentSong.artist}</Text>
+      {nowPlaying && (
+        <View style={styles.nowPlaying}>
+          <Image source={nowPlaying.image} style={styles.nowPlayingImage} />
+          <View style={styles.nowPlayingInfo}>
+            <Text style={styles.nowPlayingTitle}>{nowPlaying.title}</Text>
+            <Text style={styles.nowPlayingArtist}>{nowPlaying.artist}</Text>
+            <Slider
+              style={styles.progressBar}
+              value={progress}
+              minimumValue={0}
+              maximumValue={1}
+              minimumTrackTintColor="#1DB954"
+              maximumTrackTintColor="#ccc"
+              thumbTintColor="#1DB954"
+              onSlidingComplete={(value) => {
+                const seekTime = value * duration; // Tính thời gian cần seek
+                seekTo(seekTime);
+              }}
+            />
+            <View style={styles.timeInfo}>
+              <Text style={styles.timeText}>{formatTime(currentTime)}</Text>
+              <Text style={styles.timeText}>{formatTime(duration)}</Text>
+            </View>
+          </View>
+          <View style={styles.controlButtons}>
+            <TouchableOpacity
+              style={styles.controlButton}
+              onPress={handlePreviousSong}>
+              <Ionicons
+                name="play-skip-back-outline"
+                size={28}
+                color="#1DB954"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={togglePlayPause}
+              style={styles.playButton}>
+              <Ionicons
+                name={
+                  isPlaying ? 'pause-circle-outline' : 'play-circle-outline'
+                }
+                size={36}
+                color="#1DB954"
+              />
+            </TouchableOpacity>
+            {/* Thêm các nút chuyển bài hát */}
+            <TouchableOpacity
+              style={styles.controlButton}
+              onPress={handleNextSong}>
+              <Ionicons
+                name="play-skip-forward-outline"
+                size={28}
+                color="#1DB954"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-        <TouchableOpacity style={styles.likeButton}>
-          <Ionicons name="heart-outline" size={28} color="#000" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.playButton}>
-          <Ionicons name="play-circle-outline" size={28} color="#1DB954" />
-        </TouchableOpacity>
-      </View>
+      )}
     </View>
   );
+};
+const formatTime = (time) => {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
-  header: {padding: 15, flexDirection: 'row',  },
+  header: { padding: 15, flexDirection: 'row' },
   playlistTitle: { fontSize: 24, fontWeight: 'bold', left: '0' },
-  playlistInfo: { marginTop: 10, flexDirection: 'column', padding:15, alignItems:'flex-start' },
+  playlistInfo: {
+    marginTop: 10,
+    flexDirection: 'column',
+    padding: 15,
+    alignItems: 'flex-start',
+  },
   playlistDetail: {
     fontSize: 16,
     color: '#666',
-    justifyContent:'space-around'
+    justifyContent: 'space-around',
   },
   updated: { fontSize: 16, color: '#666' },
   songList: { marginTop: 10 },
@@ -160,34 +228,39 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
+  songImage: { width: 50, height: 50, borderRadius: 5 },
   songTitle: { fontSize: 18, fontWeight: 'bold' },
   songArtist: { fontSize: 16, color: '#666' },
   songDetail: { fontSize: 14, color: '#999' },
-  currentSongBar: {
-    padding: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-  },
-  controlButton1: {
-    marginLeft: -40,
-  },
-  controlButton2: {
-    marginLeft: -100,
-  },
-  controlButton3: {
-    marginRight: -110,
-  },
-  controlButton4: {
-    marginRight: -40,
-  },
-  currentSongTitle: { fontSize: 16, fontWeight: 'bold' },
-  currentSongArtist: { fontSize: 14, color: '#666' },
-  likeButton: { marginRight: 10 },
   playButton: { marginRight: 10 },
   songInfo: { marginLeft: 10 },
+  nowPlaying: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f8f8f8',
+    padding: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#ddd',
+  },
+  nowPlayingImage: { width: 50, height: 50, borderRadius: 5 },
+  nowPlayingInfo: { flex: 1, marginLeft: 10 },
+  nowPlayingTitle: { fontSize: 16, fontWeight: 'bold' },
+  nowPlayingArtist: { fontSize: 14, color: '#666' },
+  progressBar: { width: '100%', height: 20 },
+  timeInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  timeText: { fontSize: 12, color: '#666' },
+  controlButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  controlButton: {
+    marginHorizontal: 20,
+  },
 });
 
 export default PlaylistScreen;
