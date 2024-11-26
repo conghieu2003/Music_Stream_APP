@@ -31,7 +31,7 @@ const ArtistProfile = ({navigation}) => {
   ];
 const handleImagePress = (chart) => {
     // Điều hướng sang màn hình PlaylistDetail
-    navigation.navigate('PlaylistDetail', { chart: chart });
+    navigation.navigate('Top50Canada', { chart: chart });
   };
   const [user, setUser] = useState(null);
 

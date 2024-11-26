@@ -19,7 +19,7 @@ const useMusicPlayer = (songs) => {
       }
     }, 1000); // Cập nhật mỗi giây
   }
-  return () => clearInterval(interval); // Xóa interval khi dừng
+  return () => clearInterval(interval); // Xóa interval khi dừngr
 }, [isPlaying, sound]);
 
 
@@ -42,12 +42,20 @@ const useMusicPlayer = (songs) => {
 
     await newSound.playAsync();
 
-    newSound.setOnPlaybackStatusUpdate((status) => {
+    newSound.setOnPlaybackStatusUpdate(async (status) => {
       if (status.isLoaded) {
         setCurrentTime(status.positionMillis / 1000);
       }
       if (status.didJustFinish) {
-        setIsPlaying(false);
+        const currentIndex = songs.findIndex(song => song.uri === track.uri);
+        // setIsPlaying(false);
+        if (currentIndex < songs.length - 1) {
+          const nextTrack = songs[currentIndex + 1];
+          await playSong(nextTrack);
+        } else {
+          // If it's the last song, stop playing
+          setIsPlaying(false);
+        }
       }
     });
   };
@@ -90,6 +98,18 @@ const useMusicPlayer = (songs) => {
     }
   };
 
+  const playRandomSong = async () => {
+    if (!songs || songs.length === 0) return null;
+
+    const randomIndex = Math.floor(Math.random() * songs.length);
+    const randomSong = songs[randomIndex];
+
+    // Play the random song using existing playSong function
+    await playSong(randomSong);
+
+    // Return the played song so we can update UI
+    return randomSong;
+  };
   return {
     isPlaying,
     currentTrack,
@@ -100,6 +120,7 @@ const useMusicPlayer = (songs) => {
     seekTo,
     handleNextSong,
     handlePreviousSong,
+    playRandomSong,
   };
 };
 

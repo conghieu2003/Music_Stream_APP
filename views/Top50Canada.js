@@ -10,55 +10,44 @@ import {
 import Slider from '@react-native-community/slider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import useMusicPlayer from './MusicPlayer';
+import { useNavigation } from '@react-navigation/native';
 
 const PlaylistScreen = ({ route }) => {
+  const navigation = useNavigation();
   const { chart } = route.params;
   const playlist = {
     title: 'Top 50 - Canada',
-    likes: '1,234',
-    duration: '05:10:18',
-    updated: 'Daily chart - Toppers update',
     coverImage: require('../images/PlaylistDetails/Image50.png'),
     songs: [
       {
-        title: 'FLOWER',
-        artist: 'Jessica Gonzalez',
-        plays: '2.1M',
-        duration: '3:36',
-        image: require('../images/PlaylistDetails/Image51.png'),
-        uri: 'https://audio.jukehost.co.uk/mpSN02RCjQCE57MJNAmKUtIpa7T7qOgG', // Đảm bảo mỗi bài hát có một URL hợp lệ
+        title: 'NGỰA Ô',
+        artist: 'Dangrangto, TeuYungBoy, DONAL',
+        image:'https://i.ytimg.com/vi/agBKEeKjlo4/maxresdefault.jpg',
+        uri: 'https://audio.jukehost.co.uk/6gUhrFwnyoXSSxKK95U4tweHbrq8tXPE', // Đảm bảo mỗi bài hát có một URL hợp lệ
       },
       {
-        title: 'FLOWER',
-        artist: 'Jessica Gonzalez',
-        plays: '2.1M',
-        duration: '3:36',
+        title: 'Love is',
+        artist: 'Dangrangto',
         image: 'https://i.ytimg.com/vi/r6yYtbv63ms/maxresdefault.jpg',
         uri: 'https://audio.jukehost.co.uk/YQz1vDsGFwAgLsuE2SxfoBWfyZeYercH', // Đảm bảo mỗi bài hát có một URL hợp lệ
       },
       {
-        title: 'FLOWER',
-        artist: 'Jessica Gonzalez',
-        plays: '2.1M',
-        duration: '3:36',
-        image: require('../images/PlaylistDetails/Image51.png'),
-        uri: 'https://example.com/flower.mp3', // Đảm bảo mỗi bài hát có một URL hợp lệ
+        title: 'Xuân Thì',
+        artist: 'Phan Mạnh Quỳnh',
+        image:'https://i.ytimg.com/vi/vciMg0s-Gos/maxresdefault.jpg',
+        uri: 'https://audio.jukehost.co.uk/5aO2F4s5k18GRagBVxp7nwG2qZGfHHUR', // Đảm bảo mỗi bài hát có một URL hợp lệ
       },
       {
-        title: 'FLOWER',
-        artist: 'Jessica Gonzalez',
-        plays: '2.1M',
-        duration: '3:36',
-        image: require('../images/PlaylistDetails/Image51.png'),
-        uri: 'https://example.com/flower.mp3', // Đảm bảo mỗi bài hát có một URL hợp lệ
+        title: 'Đừng Làm Trái Tim Anh Đau',
+        artist: 'Sơn Tùng M-TP',
+        image:'https://i.ytimg.com/vi/abPmZCZZrFA/maxresdefault.jpg',
+        uri: 'https://audio.jukehost.co.uk/Im6tfU1fP8Zn7XL1Yq5xneM7YYEJtF9U', // Đảm bảo mỗi bài hát có một URL hợp lệ
       },
       {
-        title: 'FLOWER',
-        artist: 'Jessica Gonzalez',
-        plays: '2.1M',
-        duration: '3:36',
-        image: require('../images/PlaylistDetails/Image51.png'),
-        uri: 'https://example.com/flower.mp3', // Đảm bảo mỗi bài hát có một URL hợp lệ
+        title: 'Chăm Hoa',
+        artist: 'Mono',
+        image:'https://i.ytimg.com/vi/WCm2elbTEZQ/maxresdefault.jpg',
+        uri: 'https://audio.jukehost.co.uk/PY3RQVIQKNDdBMmR5cFu2nOElYyg1BfC', // Đảm bảo mỗi bài hát có một URL hợp lệ
       },
 
       // Thêm các bài hát khác tương tự...
@@ -66,7 +55,7 @@ const PlaylistScreen = ({ route }) => {
   };
 
   const [nowPlaying, setNowPlaying] = useState(null);
- 
+
   // console.log('Progress:', progress, 'Current Time:', currentTime, 'Duration:', duration);
   // Giá trị từ 0 đến 1
 
@@ -80,8 +69,9 @@ const PlaylistScreen = ({ route }) => {
     handleNextSong,
     handlePreviousSong,
     seekTo,
+    playRandomSong,
   } = useMusicPlayer(playlist.songs);
-  
+
   const progress = duration > 0 ? currentTime / duration : 0;
 
   const handlePlaySong = (song) => {
@@ -92,21 +82,37 @@ const PlaylistScreen = ({ route }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
+          <Ionicons
+            name="chevron-back-outline"
+            size={24}
+            color="#000"
+          />
+        </TouchableOpacity>
         <Image source={playlist.coverImage} style={styles.coverImage} />
         <View style={styles.playlistInfo}>
           <Text style={styles.playlistTitle}>{playlist.title}</Text>
-          <Text
-            style={
-              styles.playlistDetail
-            }>{`${playlist.likes} ${playlist.duration}`}</Text>
-          <Text style={styles.updated}>{playlist.updated}</Text>
         </View>
       </View>
 
       {/* Nút điều khiển */}
       <View style={styles.buttonHeader}>
         {/* ... Các nút điều khiển khác */}
-        <TouchableOpacity style={styles.playButton} onPress={togglePlayPause}>
+        <TouchableOpacity 
+    style={styles.playButton} 
+    onPress={async() => {
+      if (!nowPlaying) {
+        // Play random song and update nowPlaying state
+        const randomSong = await playRandomSong();
+        if (randomSong) {
+          setNowPlaying(randomSong);
+        }
+      } else {
+        togglePlayPause();
+      }
+    }}>
           <Ionicons
             name={isPlaying ? 'pause-circle-outline' : 'play-circle-outline'}
             size={28}
@@ -126,10 +132,6 @@ const PlaylistScreen = ({ route }) => {
             <View style={styles.songInfo}>
               <Text style={styles.songTitle}>{song.title}</Text>
               <Text style={styles.songArtist}>{song.artist}</Text>
-              <Text
-                style={
-                  styles.songDetail
-                }>{`${song.plays} • ${song.duration}`}</Text>
             </View>
           </TouchableOpacity>
         ))}
@@ -202,8 +204,14 @@ const formatTime = (time) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  header: { padding: 15, flexDirection: 'row' },
+  container: { flex: 1, backgroundColor: '#fff', paddingTop: 30 },
+  backButton: {
+    position: 'absolute',
+    top: -20,
+    zIndex: 1,
+    padding: 10,
+  },
+  header: { padding: 15, flexDirection: 'row', alignItems: 'center', marginTop: 5 },
   playlistTitle: { fontSize: 24, fontWeight: 'bold', left: '0' },
   playlistInfo: {
     marginTop: 10,
@@ -234,7 +242,7 @@ const styles = StyleSheet.create({
   songArtist: { fontSize: 16, color: '#666' },
   songDetail: { fontSize: 14, color: '#999' },
   playButton: { marginRight: 10 },
-  songInfo: { marginLeft: 10 },
+  songInfo: { marginLeft: 10,justifyContent: 'center' },
   nowPlaying: {
     flexDirection: 'row',
     alignItems: 'center',
