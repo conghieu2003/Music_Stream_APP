@@ -25,28 +25,32 @@
         "artist": "Brian Bailey",
         "plays": "93M",
         "duration": "4:39",
-        "image": "../images/PlaylistDetails/Image53.png"
+        "image": "../images/PlaylistDetails/Image53.png",
+        "uri": "https://audio.jukehost.co.uk/mpSN02RCjQCE57MJNAmKUtIpa7T7qOgGIpa7T7qOgG"
       },
       {
         "title": "Levitating",
         "artist": "Anthony Taylor",
         "plays": "9M",
         "duration": "7:48",
-        "image": "../images/PlaylistDetails/Image54.png"
+        "image": "../images/PlaylistDetails/Image54.png",
+         "uri": "https://audio.jukehost.co.uk/YQz1vDsGFwAgLsuE2SxfoBWfyZeYercH"
       },
       {
         "title": "Astronaut in the Ocean",
         "artist": "Pedro Moreno",
         "plays": "23M",
         "duration": "3:36",
-        "image": "../images/PlaylistDetails/Image55.png"
+        "image": "../images/PlaylistDetails/Image55.png",
+         "uri": "https://example.com/flower.mp3"
       },
       {
         "title": "Dynamite",
         "artist": "Elena Jimenez",
         "plays": "10M",
         "duration": "6:22",
-        "image": "../images/PlaylistDetails/Image56.png"
+        "image": "../images/PlaylistDetails/Image56.png",
+         "uri": "https://example.com/flower.mp3"
       }
     ]
   },
