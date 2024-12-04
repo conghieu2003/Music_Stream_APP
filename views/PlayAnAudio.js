@@ -11,7 +11,6 @@ import { useRoute } from '@react-navigation/native';
 import useMusicPlayer from './MusicPlayer';
 import Slider from '@react-native-community/slider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-// Hàm chuyển đổi thời gian từ giây sang định dạng mm:ss
 
 const MusicPlayerScreen = () => {
   const route = useRoute();
@@ -27,21 +26,26 @@ const MusicPlayerScreen = () => {
     cleanup,
     handlePreviousSong,
     handleNextSong,
+    currentTrack
   } = useMusicPlayer([nowPlaying]); // Truyền bài hát hiện tại vào useMusicPlayer
 
   useEffect(() => {
     const setupPlayback = async () => {
       try {
-        await playSong(nowPlaying); // Phát bài hát hiện tại
+        // Dừng bài hát trước đó nếu có
+        await cleanup();
   
-        // Nếu có thời gian đã dừng (currentTime > 0), seek đến thời gian đó
+        // Phát bài hát mới
+        await playSong(nowPlaying);
+  
+        // Seek đến thời gian đã lưu, nếu có
         if (initialTime > 0) {
-          await seekTo(initialTime); // Seek đến thời gian bài hát đã dừng
+          await seekTo(initialTime);
         }
   
-        // Nếu bài hát không đang phát, tạm dừng
+        // Đồng bộ trạng thái phát/tạm dừng
         if (wasPlaying) {
-          await togglePlayPause(); // Nếu trước đó đang phát, sẽ tiếp tục
+          await togglePlayPause();
         }
       } catch (error) {
         console.error('Error setting up playback:', error);
@@ -49,10 +53,9 @@ const MusicPlayerScreen = () => {
     };
   
     setupPlayback();
-  }, [nowPlaying, initialTime, wasPlaying]);
+  }, [nowPlaying]); 
   
   
-
   const progress = duration > 0 ? currentTime / duration : 0;
   return (
     <ImageBackground
@@ -61,8 +64,6 @@ const MusicPlayerScreen = () => {
       <View style={styles.container}>
         <Text style={styles.songTitle}>{nowPlaying.title}</Text>
         <Text style={styles.artistName}>{nowPlaying.artist}</Text>
-        {/* Thêm các phần tử UI tương tự */}
-          {/* Thanh tiến trình */}
           <View style={styles.progressContainer}>
           <Slider
             style={styles.progressBar}
@@ -73,7 +74,7 @@ const MusicPlayerScreen = () => {
             maximumTrackTintColor="#555"
             thumbTintColor="#1DB954"
             onSlidingComplete={(value) => {
-              const seekTime = value * duration; // Tính thời gian cần seek
+              const seekTime = value * duration; 
               seekTo(seekTime);
             }}
           />
@@ -83,13 +84,13 @@ const MusicPlayerScreen = () => {
           </View>
         </View>
         <View style={styles.controls}>
-        <TouchableOpacity style={styles.controlButton} onPress={handlePreviousSong}>
-    <Ionicons
-      name="play-skip-back"
-      size={40}
-      color="#1DB954"
-    />
-  </TouchableOpacity>
+          <TouchableOpacity style={styles.controlButton} onPress={handlePreviousSong}>
+            <Ionicons
+            name="play-skip-back"
+            size={40}
+            color="#1DB954"
+            />
+          </TouchableOpacity>
           <TouchableOpacity style={styles.controlButton} onPress={togglePlayPause}>
             <Ionicons
               name={isPlaying ? 'pause-circle' : 'play-circle'}
@@ -99,12 +100,12 @@ const MusicPlayerScreen = () => {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.controlButton} onPress={handleNextSong}>
-    <Ionicons
-      name="play-skip-forward" 
-      size={40}
-      color="#1DB954"
-    />
-  </TouchableOpacity>
+            <Ionicons
+            name="play-skip-forward" 
+            size={40}
+            color="#1DB954"
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>
@@ -165,12 +166,12 @@ const styles = StyleSheet.create({
   gap: 30, // Space between buttons
   },
   controlButton: {
-    backgroundColor: '#1DB954',
+    // backgroundColor: '#1DB954',
     padding: 15,
     borderRadius: 50,
   },
   controlButtonText: {
-    color: '#fff',
+    // color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },

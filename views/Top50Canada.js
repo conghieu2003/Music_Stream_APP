@@ -23,34 +23,32 @@ const PlaylistScreen = ({ route }) => {
         title: 'NGỰA Ô',
         artist: 'Dangrangto, TeuYungBoy, DONAL',
         image:'https://i.ytimg.com/vi/agBKEeKjlo4/maxresdefault.jpg',
-        uri: 'https://audio.jukehost.co.uk/6gUhrFwnyoXSSxKK95U4tweHbrq8tXPE', // Đảm bảo mỗi bài hát có một URL hợp lệ
+        uri: 'https://audio.jukehost.co.uk/6gUhrFwnyoXSSxKK95U4tweHbrq8tXPE', 
       },
       {
         title: 'Love is',
         artist: 'Dangrangto',
         image: 'https://i.ytimg.com/vi/r6yYtbv63ms/maxresdefault.jpg',
-        uri: 'https://audio.jukehost.co.uk/YQz1vDsGFwAgLsuE2SxfoBWfyZeYercH', // Đảm bảo mỗi bài hát có một URL hợp lệ
+        uri: 'https://audio.jukehost.co.uk/YQz1vDsGFwAgLsuE2SxfoBWfyZeYercH', 
       },
       {
         title: 'Xuân Thì',
         artist: 'Phan Mạnh Quỳnh',
         image:'https://i.ytimg.com/vi/vciMg0s-Gos/maxresdefault.jpg',
-        uri: 'https://audio.jukehost.co.uk/5aO2F4s5k18GRagBVxp7nwG2qZGfHHUR', // Đảm bảo mỗi bài hát có một URL hợp lệ
+        uri: 'https://audio.jukehost.co.uk/5aO2F4s5k18GRagBVxp7nwG2qZGfHHUR', 
       },
       {
         title: 'Đừng Làm Trái Tim Anh Đau',
         artist: 'Sơn Tùng M-TP',
         image:'https://i.ytimg.com/vi/abPmZCZZrFA/maxresdefault.jpg',
-        uri: 'https://audio.jukehost.co.uk/Im6tfU1fP8Zn7XL1Yq5xneM7YYEJtF9U', // Đảm bảo mỗi bài hát có một URL hợp lệ
+        uri: 'https://audio.jukehost.co.uk/Im6tfU1fP8Zn7XL1Yq5xneM7YYEJtF9U', 
       },
       {
         title: 'Chăm Hoa',
         artist: 'Mono',
         image:'https://i.ytimg.com/vi/WCm2elbTEZQ/maxresdefault.jpg',
-        uri: 'https://audio.jukehost.co.uk/PY3RQVIQKNDdBMmR5cFu2nOElYyg1BfC', // Đảm bảo mỗi bài hát có một URL hợp lệ
+        uri: 'https://audio.jukehost.co.uk/PY3RQVIQKNDdBMmR5cFu2nOElYyg1BfC', 
       },
-
-      // Thêm các bài hát khác tương tự...
     ],
   };
 
@@ -75,13 +73,19 @@ const PlaylistScreen = ({ route }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', async () => {
       await cleanup();
-      setNowPlaying(null);
+      setNowPlaying();
     });
 
     return unsubscribe;
   }, [navigation, cleanup]);
 
   const progress = duration > 0 ? currentTime / duration : 0;
+
+  useEffect(() => {
+    if (currentTrack) {
+      setNowPlaying(currentTrack);
+    }
+  }, [currentTrack]);
 
   const handlePlaySong = (song) => {
     playSong(song);
@@ -105,15 +109,11 @@ const PlaylistScreen = ({ route }) => {
           <Text style={styles.playlistTitle}>{playlist.title}</Text>
         </View>
       </View>
-
-      {/* Nút điều khiển */}
       <View style={styles.buttonHeader}>
-        {/* ... Các nút điều khiển khác */}
         <TouchableOpacity 
     style={styles.playButton} 
     onPress={async() => {
       if (!nowPlaying) {
-        // Play random song and update nowPlaying state
         const randomSong = await playRandomSong();
         if (randomSong) {
           setNowPlaying(randomSong);
@@ -148,12 +148,13 @@ const PlaylistScreen = ({ route }) => {
       {nowPlaying && (
         <TouchableOpacity
         style={styles.nowPlaying}
-        onPress={() => {
+        onPress={async () => {
+          await cleanup();
           navigation.navigate('PlayAnAudio', { 
             nowPlaying,
             currentTime,
             isPlaying,
-            duration
+            duration,
            });
         }}>
           <Image source={{ uri: nowPlaying.image }} style={styles.nowPlayingImage} />
@@ -169,7 +170,7 @@ const PlaylistScreen = ({ route }) => {
               maximumTrackTintColor="#ccc"
               thumbTintColor="#1DB954"
               onSlidingComplete={(value) => {
-                const seekTime = value * duration; // Tính thời gian cần seek
+                const seekTime = value * duration; 
                 seekTo(seekTime);
               }}
             />
@@ -199,7 +200,6 @@ const PlaylistScreen = ({ route }) => {
                 color="#1DB954"
               />
             </TouchableOpacity>
-            {/* Thêm các nút chuyển bài hát */}
             <TouchableOpacity
               style={styles.controlButton}
               onPress={handleNextSong}>

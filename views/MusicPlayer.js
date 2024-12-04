@@ -5,8 +5,8 @@ const useMusicPlayer = (songs) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(null);
   const [sound, setSound] = useState(null);
-  const [currentTime, setCurrentTime] = useState(0); // Thêm state cho thời gian hiện tại
-  const [duration, setDuration] = useState(0); // Thêm state cho tổng thời gian
+  const [currentTime, setCurrentTime] = useState(0); 
+  const [duration, setDuration] = useState(0); 
 
   useEffect(() => {
   let interval;
@@ -14,12 +14,12 @@ const useMusicPlayer = (songs) => {
     interval = setInterval(async () => {
       const status = await sound.getStatusAsync();
       if (status.isLoaded) {
-        setCurrentTime(status.positionMillis / 1000); // Thời gian hiện tại (giây)
-        setDuration(status.durationMillis / 1000); // Tổng thời gian (giây)
+        setCurrentTime(status.positionMillis / 1000); 
+        setDuration(status.durationMillis / 1000); 
       }
-    }, 1000); // Cập nhật mỗi giây
+    }, 1000); 
   }
-  return () => clearInterval(interval); // Xóa interval khi dừngr
+  return () => clearInterval(interval);
 }, [isPlaying, sound]);
 
 
@@ -48,12 +48,10 @@ const useMusicPlayer = (songs) => {
       }
       if (status.didJustFinish) {
         const currentIndex = songs.findIndex(song => song.uri === track.uri);
-        // setIsPlaying(false);
         if (currentIndex < songs.length - 1) {
           const nextTrack = songs[currentIndex + 1];
           await playSong(nextTrack);
         } else {
-          // If it's the last song, stop playing
           setIsPlaying(false);
         }
       }
@@ -61,24 +59,24 @@ const useMusicPlayer = (songs) => {
   };
 
   const handlePreviousSong = async () => {
-    if (!currentTrack) return; // Nếu chưa có bài hát nào được chọn
+    if (!currentTrack) return; 
     const currentIndex = songs.findIndex(
       (song) => song.uri === currentTrack.uri
     );
     if (currentIndex > 0) {
       const previousTrack = songs[currentIndex - 1];
-      await playSong(previousTrack); // Phát bài hát trước
+      await playSong(previousTrack); 
     }
   };
 
   const handleNextSong = async () => {
-    if (!currentTrack) return; // Nếu chưa có bài hát nào được chọn
+    if (!currentTrack) return;
     const currentIndex = songs.findIndex(
       (song) => song.uri === currentTrack.uri
     );
     if (currentIndex < songs.length - 1) {
       const nextTrack = songs[currentIndex + 1];
-      await playSong(nextTrack); // Phát bài hát tiếp theo
+      await playSong(nextTrack);
     }
   };
 
@@ -94,15 +92,12 @@ const useMusicPlayer = (songs) => {
   };
   const seekTo = async (time) => {
     if (sound) {
-      await sound.setPositionAsync(time * 1000); // Chuyển đổi sang milliseconds
+      await sound.setPositionAsync(time * 1000); 
     }
   };
 
   const playRandomSong = async () => {
-    // If no songs available
     if (!songs || songs.length === 0) return;
-
-    // Get random index, excluding current song if any
     let randomIndex;
     if (currentTrack) {
       const currentIndex = songs.findIndex(song => song.uri === currentTrack.uri);
@@ -112,8 +107,6 @@ const useMusicPlayer = (songs) => {
     } else {
       randomIndex = Math.floor(Math.random() * songs.length);
     }
-
-    // Play the random song
     await playSong(songs[randomIndex]);
   };
 
