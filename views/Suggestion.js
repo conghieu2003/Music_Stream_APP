@@ -125,7 +125,7 @@ const SuggestionScreen = ({ route }) => {
       }
     }}>
           <Ionicons
-            name={isPlaying ? 'pause-circle-outline' : 'play-circle-outline'}
+            name="shuffle-outline"
             size={28}
             color="#1DB954"
           />
