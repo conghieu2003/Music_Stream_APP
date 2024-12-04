@@ -9,21 +9,36 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-// Import dữ liệu từ các file JSON
 import songs from '../data/songs.json';
 import albums from '../data/albums.json';
 import fans from '../data/fans.json';
+import axios from 'axios';
+
+const USERS_API_URL = 'https://6458c8bc4eb3f674df7d3ce6.mockapi.io/ch/v1/category';
 
 const ArtistProfile = ({ route, navigation }) => {
+  const { userId } = route?.params || {}; // Nhận `userId` từ route
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { user } = route?.params || {};  // Nếu không có 'user', gán giá trị mặc định là một object rỗng
 
   useEffect(() => {
-    if (user) {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`${USERS_API_URL}/${userId}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userId) {
+      fetchUser();
+    } else {
       setLoading(false);
     }
-  }, [user]);
+  }, [userId]);
 
   // Xử lý nút play bài hát
   const handlePlaySong = (songTitle) => {
@@ -33,7 +48,7 @@ const ArtistProfile = ({ route, navigation }) => {
   // Xử lý chuyển sang trang profile nghệ sĩ
   const handleGoToArtistProfile = (artistName) => {
     console.log(`Navigate to profile of ${artistName}`);
-    navigation.navigate('ArtistProfile', { user: artistName }); // Chuyển tới profile nghệ sĩ
+    navigation.navigate('ArtistProfile', { userId: artistName });
   };
 
   // Nếu dữ liệu đang tải
@@ -45,11 +60,11 @@ const ArtistProfile = ({ route, navigation }) => {
     );
   }
 
-  // Nếu không có dữ liệu người dùng
+  // Nếu không tìm thấy user
   if (!user) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Không thể tải dữ liệu người dùng.</Text>
+        <Text style={styles.errorText}>Không tìm thấy thông tin nghệ sĩ.</Text>
       </View>
     );
   }
@@ -57,10 +72,10 @@ const ArtistProfile = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.profile}>
-        {/* Avatar của người dùng */}
+        {/* Avatar của nghệ sĩ */}
         <Image source={{ uri: user.avatar }} style={styles.profileImage} />
         <Text style={styles.profileName}>{user.name}</Text>
-        <Text style={styles.followerCount}>{user.followers} Followers</Text>
+        <Text style={styles.followerCount}>1000 Followers</Text>
 
         {/* Nút Follow và các nút điều hướng */}
         <View style={styles.buttons}>
@@ -87,7 +102,6 @@ const ArtistProfile = ({ route, navigation }) => {
       {/* Thông tin về bài hát, album */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Albums</Text>
-        {/* Hiển thị các album */}
         {albums.map((album) => (
           <View key={album.id} style={styles.albumItem}>
             <Image source={{ uri: album.cover }} style={styles.albumImage} />
@@ -98,7 +112,6 @@ const ArtistProfile = ({ route, navigation }) => {
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Songs</Text>
-        {/* Hiển thị các bài hát */}
         {songs.map((song) => (
           <TouchableOpacity key={song.id} onPress={() => handlePlaySong(song.title)} style={styles.songItem}>
             <Text style={styles.songName}>{song.title}</Text>
@@ -136,7 +149,6 @@ const styles = StyleSheet.create({
   rightButtons: { flexDirection: 'row', alignItems: 'center' },
   iconButton: { marginHorizontal: 5 },
 
-  // Styles cho phần bài hát và album
   section: { marginTop: 20, paddingHorizontal: 10 },
   sectionTitle: { fontSize: 20, fontWeight: 'bold' },
   albumItem: { flexDirection: 'row', alignItems: 'center', marginVertical: 10 },

@@ -7,6 +7,7 @@ import LoginForm from './views/LoginForm';
 import SignUpScreen from './views/SignUpScreen';
 import AppTabs from './AppStack/AppTabs'; // Tab chính sau khi đăng nhập
 import LoginWithPhone from './views/LoginWithPhone';
+import ArtistProfile from './views/ArtistProfile';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export default function App() {
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="LoginForm" component={LoginForm} />
           <Stack.Screen name="HomeTabs" component={AppTabs} />
+          <Stack.Screen name="ArtistProfile" component={ArtistProfile} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>

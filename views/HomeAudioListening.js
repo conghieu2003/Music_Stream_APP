@@ -60,33 +60,37 @@ const ArtistProfile = ({navigation}) => {
     return <Text>Loading...</Text>; // Hiển thị khi dữ liệu chưa được tải
   }
 
-  const handleMenuPress = () => {
-    // Hiển thị menu với các tùy chọn
-    Alert.alert(
-      "Profile Options",
-      "Choose an option",
-      [
-        {
-          text: "View Profile",
-          onPress: () => {
-            // Điều hướng đến màn hình hồ sơ
-            navigation.navigate('ProfileScreen', { user: user });
+    const handleMenuPress = () => {
+      // Hiển thị menu với các tùy chọn
+      Alert.alert(
+        "Profile Options",
+        "Choose an option",
+        [
+          {
+            text: "View Profile",
+            onPress: () => {
+              // Điều hướng đến màn hình hồ sơ
+              navigation.navigate('ArtistProfile', { user: user });
+            }
+          },
+          {
+            text: "Log Out",
+            onPress: () => {
+              // Xử lý đăng xuất
+              Alert.alert("Logged out", "You have been logged out.");
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'LoginForm' }],
+              });
+            }
+          },
+          {
+            text: "Cancel",
+            style: "cancel"
           }
-        },
-        {
-          text: "Log Out",
-          onPress: () => {
-            // Xử lý đăng xuất
-            Alert.alert("Logged out", "You have been logged out.");
-          }
-        },
-        {
-          text: "Cancel",
-          style: "cancel"
-        }
-      ]
-    );
-  };
+        ]
+      );
+    };
 
   return (
     <ScrollView style={styles.container}>
