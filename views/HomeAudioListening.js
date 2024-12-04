@@ -13,9 +13,9 @@ const ArtistProfile = ({navigation}) => {
   ];
 
   const charts = [
-    { title: 'Top 50 Canada', image: require('../images/HomeAudioListening/Container31.png'), name: 'Daily chart - Toppers update' },
-    { title: 'Top 50 Global', image: require('../images/HomeAudioListening/Container32.png'), name: 'Daily chart - Toppers update' },
-    { title: 'Top 50 Trending', image: require('../images/HomeAudioListening/Container33.png'), name: 'Daily chart - Toppers update' },
+    { title: 'Top 50 Canada', image: require('../images/HomeAudioListening/Container31.png')  },
+    { title: 'Top 50 Global', image: require('../images/HomeAudioListening/Container32.png') },
+    { title: 'Top 50 Trending', image: require('../images/HomeAudioListening/Container33.png') },
   ];
 
   const trendingAlbums = [
@@ -29,10 +29,16 @@ const ArtistProfile = ({navigation}) => {
     { name: 'Elizabeth Hall', image: require('../images/HomeAudioListening/Image40.png') },
     { name: 'Anthony', image: require('../images/HomeAudioListening/Image41.png') },
   ];
-const handleImagePress = (chart) => {
-    // Điều hướng sang màn hình PlaylistDetail
+  const handleImagePress = (chart) => {
     navigation.navigate('Top50Canada', { chart: chart });
   };
+  const handleSuggestionPress = (suggestion) => {
+    navigation.navigate('Suggestion', { suggestion: suggestion });
+  };
+  const handleTrendingPress = (trending) => {
+    navigation.navigate('TrendingAlbum', { trending: trending });
+  };
+  
   const [user, setUser] = useState(null);
 
   // Lấy dữ liệu từ user.json
@@ -102,7 +108,8 @@ const handleImagePress = (chart) => {
         <Text style={styles.sectionTitle}>Suggestions for you</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {suggestions.map((item, index) => (
-            <TouchableOpacity key={index} style={styles.item}>
+            <TouchableOpacity key={index} style={styles.item}
+              onPress={() => handleSuggestionPress(item)}>
               <Image source={item.image} style={styles.itemImage} />
               <View style={styles.itemOverlay}>
                 <Text style={styles.itemTitle}>{item.title}</Text>
@@ -126,7 +133,6 @@ const handleImagePress = (chart) => {
             <TouchableOpacity onPress={() => handleImagePress(chart)}> 
               <Image source={chart.image} style={styles.chartImage} />
               <Text style={styles.chartTitle}>{chart.title}</Text>
-              <Text style={styles.chartName}>{chart.name}</Text>
               </TouchableOpacity>
             </View>
           ))}
@@ -143,9 +149,11 @@ const handleImagePress = (chart) => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {trendingAlbums.map((album, index) => (
             <View key={index} style={styles.albumItem}>
+              <TouchableOpacity onPress={() => handleTrendingPress(album)}>
               <Image source={album.image} style={styles.albumImage} />
               <Text style={styles.albumTitle}>{album.title}</Text>
               <Text style={styles.albumArtist}>{album.artist}</Text>
+              </TouchableOpacity>
             </View>
           ))}
         </ScrollView>

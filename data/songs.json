@@ -1,62 +1,32 @@
-{
-  "playlist": {
-    "title": "Top 50 - Canada",
-    "likes": "1,234",
-    "duration": "05:10:18",
-    "updated": "Daily chart - Toppers update",
-    "coverImage": "../images/PlaylistDetails/Image50.png",
-    "songs": [
-      {
-        "title": "FLOWER",
-        "artist": "Jessica Gonzalez",
-        "plays": "2.1M",
-        "duration": "3:36",
-        "image": "../images/PlaylistDetails/Image51.png"
-      },
-      {
-        "title": "Shape of You",
-        "artist": "Anthony Taylor",
-        "plays": "68M",
-        "duration": "3:35",
-        "image": "../images/PlaylistDetails/Image52.png"
-      },
-      {
-        "title": "Blinding Lights",
-        "artist": "Brian Bailey",
-        "plays": "93M",
-        "duration": "4:39",
-        "image": "../images/PlaylistDetails/Image53.png",
-        "uri": "https://audio.jukehost.co.uk/mpSN02RCjQCE57MJNAmKUtIpa7T7qOgGIpa7T7qOgG"
-      },
-      {
-        "title": "Levitating",
-        "artist": "Anthony Taylor",
-        "plays": "9M",
-        "duration": "7:48",
-        "image": "../images/PlaylistDetails/Image54.png",
-         "uri": "https://audio.jukehost.co.uk/YQz1vDsGFwAgLsuE2SxfoBWfyZeYercH"
-      },
-      {
-        "title": "Astronaut in the Ocean",
-        "artist": "Pedro Moreno",
-        "plays": "23M",
-        "duration": "3:36",
-        "image": "../images/PlaylistDetails/Image55.png",
-         "uri": "https://example.com/flower.mp3"
-      },
-      {
-        "title": "Dynamite",
-        "artist": "Elena Jimenez",
-        "plays": "10M",
-        "duration": "6:22",
-        "image": "../images/PlaylistDetails/Image56.png",
-         "uri": "https://example.com/flower.mp3"
-      }
-    ]
+[
+  {
+    "title": "NGỰA Ô",
+    "artist": "Dangrangto, TeuYungBoy, DONAL",
+    "image": "https://i.ytimg.com/vi/agBKEeKjlo4/maxresdefault.jpg",
+    "uri": "https://audio.jukehost.co.uk/6gUhrFwnyoXSSxKK95U4tweHbrq8tXPE" 
   },
-  "currentSong": {
-    "title": "FLOWER",
-    "artist": "Jessica Gonzalez",
-    "image": "../images/PlaylistDetails/Image57.png"
+  {
+    "title": "Love is",
+    "artist": "Dangrangto",
+    "image": "https://i.ytimg.com/vi/r6yYtbv63ms/maxresdefault.jpg",
+    "uri": "https://audio.jukehost.co.uk/YQz1vDsGFwAgLsuE2SxfoBWfyZeYercH"
+  },
+  {
+    "title": "Xuân Thì",
+    "artist": "Phan Mạnh Quỳnh",
+    "image": "https://i.ytimg.com/vi/vciMg0s-Gos/maxresdefault.jpg",
+    "uri": "https://audio.jukehost.co.uk/5aO2F4s5k18GRagBVxp7nwG2qZGfHHUR"
+  },
+  {
+    "title": "Đừng Làm Trái Tim Anh Đau",
+    "artist": "Sơn Tùng M-TP",
+    "image": "https://i.ytimg.com/vi/abPmZCZZrFA/maxresdefault.jpg",
+    "uri": "https://audio.jukehost.co.uk/Im6tfU1fP8Zn7XL1Yq5xneM7YYEJtF9U"
+  },
+  {
+    "title": "Chăm Hoa",
+    "artist": "Mono",
+    "image": "https://i.ytimg.com/vi/WCm2elbTEZQ/maxresdefault.jpg",
+    "uri": "https://audio.jukehost.co.uk/PY3RQVIQKNDdBMmR5cFu2nOElYyg1BfC"
   }
-}
+]

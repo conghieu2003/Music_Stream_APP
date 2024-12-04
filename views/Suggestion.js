@@ -12,13 +12,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import useMusicPlayer from './MusicPlayer';
 import { useNavigation } from '@react-navigation/native';
 
-const PlaylistScreen = ({ route }) => {
+const SuggestionScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { chart } = route.params;
+  const { item } = route.params;
   const songsData = require('../data/songs.json');
   const playlist = {
-    title: 'Top 50 - Canada',
-    coverImage: require('../images/PlaylistDetails/Image50.png'),
+    title: 'Reflection',
+    coverImage: require('../images/HomeAudioListening/Container26.png'),
     songs: songsData
     // songs: [
     //   {
@@ -292,4 +292,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlaylistScreen;
+export default SuggestionScreen;
