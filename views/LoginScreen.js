@@ -1,9 +1,14 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Pen } from 'lucide-react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image ,ImageBackground } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const LoginScreen = ({ navigation }) => {
   return (
+    <ImageBackground  
+    source={require('../images/HomeAudioListening/login.jpg')}
+    style={styles.container}
+    resizeMode="cover">
     <View style={styles.container}>
       {/* Logo Image thay vì logo-spotify */}
       <Image source={require('../images/ArtistProfile/spotify.png')} style={styles.logo} />
@@ -12,6 +17,7 @@ const LoginScreen = ({ navigation }) => {
       <Text style={styles.title}> Miễn phí trên Spotify.</Text>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignUp')}>
+      <Pen name="person-add-outline" size={24} color="#ff1b6b" />
         <Text style={styles.buttonText}>Đăng ký miễn phí</Text>
       </TouchableOpacity>
 
@@ -32,6 +38,7 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.buttonText}>Đăng nhập bằng tài khoản</Text>
       </TouchableOpacity>
     </View>
+    </ImageBackground>
   );
 };
 
@@ -40,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
+    // backgroundColor: '#000',
   },
   logo: {
     width: 120, // Bạn có thể thay đổi kích thước tùy ý

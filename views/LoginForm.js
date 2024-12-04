@@ -7,7 +7,7 @@ const LoginForm = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const { users } = useContext(UserContext); // Lấy danh sách người dùng từ context
+  const { users, loginUser } = useContext(UserContext);  // Sử dụng context để lấy danh sách người dùng và đăng nhập
 
   const handleLogin = () => {
     const user = users.find(
@@ -16,7 +16,8 @@ const LoginForm = ({ navigation }) => {
 
     if (user) {
       setError('');
-      navigation.replace('HomeTabs'); // Chuyển sang màn hình chính
+      loginUser(user);  // Đăng nhập người dùng và lưu vào context
+      navigation.replace('HomeTabs');  // Điều hướng đến màn hình chính
     } else {
       setError('Tên tài khoản hoặc mật khẩu không đúng!');
     }

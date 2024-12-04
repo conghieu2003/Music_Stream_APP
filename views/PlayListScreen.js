@@ -18,18 +18,18 @@ const initialPlaylists = [
     title: 'Ipsum sit nulla',
     creator: 'Ashley Scott',
     songs: 12,
-    image: require('../images/MyPlaylists/Image110.png'),
+    image: require('../images/MyPlaylists/Image110.png'), // Thay thế bằng đường dẫn tới ảnh của bạn
   },
   {
     id: '2',
     title: 'Occaecat aliq',
     creator: 'Jose Garcia',
     songs: 4,
-    image: require('../images/MyPlaylists/Image111.png'),
+    image: require('../images/MyPlaylists/Image111.png'), // Thay thế bằng đường dẫn tới ảnh của bạn
   },
 ];
 
-const MyPlaylist = ({ navigation }) => {
+const PlaylistScreen = ({ navigation }) => {
   const [playlists, setPlaylists] = useState(initialPlaylists);
   const [modalVisible, setModalVisible] = useState(false);
   const [newPlaylistTitle, setNewPlaylistTitle] = useState('');
@@ -46,7 +46,7 @@ const MyPlaylist = ({ navigation }) => {
       title: newPlaylistTitle,
       creator: 'Unknown Creator',
       songs: 0,
-      image: require('../images/MyPlaylists/Image110.png'),
+      image: require('../images/MyPlaylists/Image110.png'), // Thay thế bằng đường dẫn tới ảnh mặc định
     };
 
     setPlaylists([...playlists, newPlaylist]);
@@ -62,7 +62,7 @@ const MyPlaylist = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity style={styles.likeButton}>
           <Ionicons name="chevron-back-outline" size={28} color="#000" />
         </TouchableOpacity>
         <Text style={styles.header}>Playlists</Text>
@@ -74,7 +74,7 @@ const MyPlaylist = ({ navigation }) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.playlistItem}
-            onPress={() => handlePlaylistPress(item)} // Gọi hàm khi nhấn vào playlist
+            onPress={() => handlePlaylistPress(item)}
           >
             <Image source={item.image} style={styles.playlistImage} />
             <View style={styles.playlistInfo}>
@@ -84,14 +84,17 @@ const MyPlaylist = ({ navigation }) => {
           </TouchableOpacity>
         )}
       />
-      <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => setModalVisible(true)}
+      >
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
 
-      {/* Modal thêm Playlist */}
+      {/* Modal nhập tên playlist */}
       <Modal
         animationType="slide"
-        transparent
+        transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
@@ -131,24 +134,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 16,
   },
+  header: {
+    fontSize: 24,
+    marginBottom: 16,
+    textAlign: 'center',
+    marginLeft: 100,
+  },
   headerContainer: {
     marginTop: 30,
     flexDirection: 'row',
-    alignItems: 'center',
-  },
-  backButton: {
-    marginRight: 8,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    flex: 1,
-    textAlign: 'center',
   },
   subHeader: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginVertical: 10,
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
   },
   playlistItem: {
     flexDirection: 'row',
@@ -174,8 +173,8 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: 'absolute',
-    bottom: 20,
-    right: 20,
+    bottom: 80,
+    right: 16,
     width: 50,
     height: 50,
     borderRadius: 25,
@@ -207,7 +206,7 @@ const styles = StyleSheet.create({
   },
   modalInput: {
     width: '100%',
-    height: 40,
+    height: 50,
     borderColor: '#ddd',
     borderWidth: 1,
     borderRadius: 8,
@@ -221,17 +220,17 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     flex: 1,
-    padding: 10,
-    borderRadius: 8,
-    marginHorizontal: 8,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 8,
+    marginHorizontal: 8,
   },
   cancelButton: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#ddd',
   },
   saveButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#000',
   },
   modalButtonText: {
     color: '#fff',
@@ -239,4 +238,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyPlaylist;
+export default PlaylistScreen;
