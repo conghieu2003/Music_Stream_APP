@@ -25,6 +25,8 @@ const MusicPlayerScreen = () => {
     seekTo,
     playSong,
     cleanup,
+    handlePreviousSong,
+    handleNextSong,
   } = useMusicPlayer([nowPlaying]); // Truyền bài hát hiện tại vào useMusicPlayer
 
   useEffect(() => {
@@ -81,6 +83,13 @@ const MusicPlayerScreen = () => {
           </View>
         </View>
         <View style={styles.controls}>
+        <TouchableOpacity style={styles.controlButton} onPress={handlePreviousSong}>
+    <Ionicons
+      name="play-skip-back"
+      size={40}
+      color="#1DB954"
+    />
+  </TouchableOpacity>
           <TouchableOpacity style={styles.controlButton} onPress={togglePlayPause}>
             <Ionicons
               name={isPlaying ? 'pause-circle' : 'play-circle'}
@@ -88,6 +97,14 @@ const MusicPlayerScreen = () => {
               color="#1DB954"
             />
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.controlButton} onPress={handleNextSong}>
+    <Ionicons
+      name="play-skip-forward" 
+      size={40}
+      color="#1DB954"
+    />
+  </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>
@@ -143,6 +160,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 40,
+    alignItems: 'center',
+  paddingHorizontal: 20,
+  gap: 30, // Space between buttons
   },
   controlButton: {
     backgroundColor: '#1DB954',
