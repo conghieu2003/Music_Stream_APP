@@ -19,7 +19,7 @@ const useMusicPlayer = (songs) => {
       }
     }, 1000); // Cập nhật mỗi giây
   }
-  return () => clearInterval(interval); // Xóa interval khi dừng
+  return () => clearInterval(interval); // Xóa interval khi dừngr
 }, [isPlaying, sound]);
 
 
@@ -42,12 +42,20 @@ const useMusicPlayer = (songs) => {
 
     await newSound.playAsync();
 
-    newSound.setOnPlaybackStatusUpdate((status) => {
+    newSound.setOnPlaybackStatusUpdate(async (status) => {
       if (status.isLoaded) {
         setCurrentTime(status.positionMillis / 1000);
       }
       if (status.didJustFinish) {
-        setIsPlaying(false);
+        const currentIndex = songs.findIndex(song => song.uri === track.uri);
+        // setIsPlaying(false);
+        if (currentIndex < songs.length - 1) {
+          const nextTrack = songs[currentIndex + 1];
+          await playSong(nextTrack);
+        } else {
+          // If it's the last song, stop playing
+          setIsPlaying(false);
+        }
       }
     });
   };
@@ -90,6 +98,40 @@ const useMusicPlayer = (songs) => {
     }
   };
 
+  const playRandomSong = async () => {
+    // If no songs available
+    if (!songs || songs.length === 0) return;
+
+    // Get random index, excluding current song if any
+    let randomIndex;
+    if (currentTrack) {
+      const currentIndex = songs.findIndex(song => song.uri === currentTrack.uri);
+      do {
+        randomIndex = Math.floor(Math.random() * songs.length);
+      } while (randomIndex === currentIndex && songs.length > 1);
+    } else {
+      randomIndex = Math.floor(Math.random() * songs.length);
+    }
+
+    // Play the random song
+    await playSong(songs[randomIndex]);
+  };
+
+  const cleanup = async () => {
+    if (sound) {
+      try {
+        await sound.stopAsync();
+        await sound.unloadAsync();
+        setSound(null);
+        setIsPlaying(false);
+        setCurrentTrack(null);
+        setCurrentTime(0);
+        setDuration(0);
+      } catch (error) {
+        console.log('Cleanup error:', error);
+      }
+    }
+  };
   return {
     isPlaying,
     currentTrack,
@@ -100,6 +142,8 @@ const useMusicPlayer = (songs) => {
     seekTo,
     handleNextSong,
     handlePreviousSong,
+    playRandomSong,
+    cleanup,
   };
 };
 
